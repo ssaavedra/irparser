@@ -450,8 +450,8 @@ main([FileName]) ->
     #finf{units = Us, module = ModName} = FileInfo2,
     JSONReps = [ {U, build_json_for(FileInfo2, DepGraph, U)} || U <- Us ],
     [ write_to_file(ModName, U, JSON) || {U, JSON} <- JSONReps ],
-    io:format("Done~n").
-    
+    io:format("Done~n");
+main(_) -> io:format("Usage: irparser <filename.erl>~n").    
     
     
 list_span(_   , Yes, No, []) -> {lists:reverse(Yes), lists:reverse(No)};
