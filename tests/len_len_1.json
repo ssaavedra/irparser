@@ -1,0 +1,120 @@
+{
+  "body": {
+    "defs": [
+      {
+        "body": {
+          "branches": [
+            {
+              "exp": {
+                "expType": "literal",
+                "type": "int",
+                "value": 0
+              },
+              "pattern": {
+                "args": [],
+                "name": "nil",
+                "patType": "constructor"
+              }
+            },
+            {
+              "exp": {
+                "bindings": [
+                  {
+                    "lhs": {
+                      "name": "L1",
+                      "type": "int"
+                    },
+                    "rhs": {
+                      "arguments": [
+                        {
+                          "expType": "variable",
+                          "variable": "Ys"
+                        }
+                      ],
+                      "expType": "application",
+                      "external": false,
+                      "name": "len_1"
+                    }
+                  }
+                ],
+                "expType": "let",
+                "main": {
+                  "arguments": [
+                    {
+                      "expType": "variable",
+                      "variable": "L1"
+                    },
+                    {
+                      "expType": "literal",
+                      "type": "int",
+                      "value": 1
+                    }
+                  ],
+                  "expType": "application",
+                  "external": true,
+                  "name": {
+                    "arity": 2,
+                    "funName": "+",
+                    "moduleName": "builtins"
+                  }
+                }
+              },
+              "pattern": {
+                "args": [
+                  {
+                    "name": "_Y",
+                    "patType": "variable",
+                    "type": "int"
+                  },
+                  {
+                    "name": "Ys",
+                    "patType": "variable",
+                    "type": "list"
+                  }
+                ],
+                "name": "cons",
+                "patType": "constructor"
+              }
+            }
+          ],
+          "discriminant": {
+            "expType": "variable",
+            "variable": "Xs"
+          },
+          "expType": "case"
+        },
+        "name": "len_1",
+        "params": [
+          {
+            "name": "Xs",
+            "type": "list"
+          }
+        ]
+      }
+    ],
+    "expType": "letfun",
+    "main": {
+      "arguments": [
+        {
+          "expType": "variable",
+          "variable": "Xs"
+        }
+      ],
+      "expType": "application",
+      "external": false,
+      "name": "len_1"
+    }
+  },
+  "entry_point": "len_1",
+  "name": {
+    "arity": 1,
+    "fun_name": "len",
+    "module": "len"
+  },
+  "params": [
+    {
+      "name": "Xs",
+      "type": "list"
+    }
+  ]
+}
