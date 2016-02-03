@@ -5,10 +5,8 @@
 -module(irparser).
 
 -author("Manuel Montenegro").
--vsn(1.0)
 
--compile(export_all).
-
+-export([main/1]).
 
 
 
@@ -444,7 +442,7 @@ write_to_file(ModName, {F,A}, JSON) ->
     io:format(Handle, "~ts~n", [jsx:prettify(jsx:encode(JSON))]),
     io:format("Execution unit ~w/~w written into ~s~n", [F, A, FileName]).
 
-parse(FileName) ->
+main([FileName]) ->
     Comments = erl_comment_scan:file(FileName),
     FileInfo = get_metadata(Comments),
     FileInfo2 = parse_file(FileName, FileInfo),
