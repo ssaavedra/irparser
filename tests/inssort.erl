@@ -1,4 +1,4 @@
--module(insort).
+-module(inssort).
 
 -export([inssort/2]).
 
@@ -25,7 +25,6 @@ f3(V,I,H) ->                            % V :: loc, I :: int, H :: heap
     J = '-'(I,#{int => 1}),             % J :: int
     f4(V,I,J,H).
 
-% -assert("X >= 3").
 f4(V,I,J,H) ->                          % V :: loc, I :: int, J :: int, H :: heap
     B1 = '>='(J, #{int => 0}),          % B1 :: bool
     case B1 of
@@ -53,16 +52,8 @@ f5(V,I,J,H) ->                          % V :: loc, I :: int, J :: int, H :: hea
 f6(V,I,H) ->                            % V :: loc, I :: int, H :: heap
     I1 = '+'(I,#{int => 1}),            % I1 :: int
     f2(V,I1,H).    
-        
-
     
-%inssort(V,H) -> f1(V,H).                % V :: loc, H :: heap
-
-inssort(V,H) ->
-    case V of
-        {X1,X2} -> #{int => 0}
-    end.
-
+inssort(V,H) -> f1(V,H).                % V :: loc, H :: heap
 
 % TEST:
 

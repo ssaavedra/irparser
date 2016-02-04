@@ -1,0 +1,840 @@
+{
+  "body": {
+    "defs": [
+      {
+        "body": {
+          "bindings": [
+            {
+              "lhs": {
+                "name": "E",
+                "type": "int"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "H"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "V"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "J"
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 3,
+                  "funName": "sel-array",
+                  "moduleName": "builtins"
+                }
+              }
+            },
+            {
+              "lhs": {
+                "name": "J1",
+                "type": "int"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "J"
+                  },
+                  {
+                    "expType": "literal",
+                    "type": "int",
+                    "value": 1
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 2,
+                  "funName": "+",
+                  "moduleName": "builtins"
+                }
+              }
+            },
+            {
+              "lhs": {
+                "name": "E2",
+                "type": "int"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "H"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "V"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "J1"
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 3,
+                  "funName": "sel-array",
+                  "moduleName": "builtins"
+                }
+              }
+            },
+            {
+              "lhs": {
+                "name": "H1",
+                "type": "loc"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "H"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "V"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "J"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "E2"
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 4,
+                  "funName": "mod-array",
+                  "moduleName": "builtins"
+                }
+              }
+            },
+            {
+              "lhs": {
+                "name": "H2",
+                "type": "loc"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "H1"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "V"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "J1"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "E"
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 4,
+                  "funName": "mod-array",
+                  "moduleName": "builtins"
+                }
+              }
+            },
+            {
+              "lhs": {
+                "name": "J2",
+                "type": "int"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "J"
+                  },
+                  {
+                    "expType": "literal",
+                    "type": "int",
+                    "value": 1
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 2,
+                  "funName": "-",
+                  "moduleName": "builtins"
+                }
+              }
+            }
+          ],
+          "expType": "let",
+          "main": {
+            "arguments": [
+              {
+                "expType": "variable",
+                "variable": "V"
+              },
+              {
+                "expType": "variable",
+                "variable": "I"
+              },
+              {
+                "expType": "variable",
+                "variable": "J2"
+              },
+              {
+                "expType": "variable",
+                "variable": "H2"
+              }
+            ],
+            "expType": "application",
+            "external": false,
+            "name": "f4_4"
+          }
+        },
+        "name": "f5_4",
+        "params": [
+          {
+            "name": "V",
+            "type": "loc"
+          },
+          {
+            "name": "I",
+            "type": "int"
+          },
+          {
+            "name": "J",
+            "type": "int"
+          },
+          {
+            "name": "H",
+            "type": "heap"
+          }
+        ]
+      },
+      {
+        "body": {
+          "bindings": [
+            {
+              "lhs": {
+                "name": "I1",
+                "type": "int"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "I"
+                  },
+                  {
+                    "expType": "literal",
+                    "type": "int",
+                    "value": 1
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 2,
+                  "funName": "+",
+                  "moduleName": "builtins"
+                }
+              }
+            }
+          ],
+          "expType": "let",
+          "main": {
+            "arguments": [
+              {
+                "expType": "variable",
+                "variable": "V"
+              },
+              {
+                "expType": "variable",
+                "variable": "I1"
+              },
+              {
+                "expType": "variable",
+                "variable": "H"
+              }
+            ],
+            "expType": "application",
+            "external": false,
+            "name": "f2_3"
+          }
+        },
+        "name": "f6_3",
+        "params": [
+          {
+            "name": "V",
+            "type": "loc"
+          },
+          {
+            "name": "I",
+            "type": "int"
+          },
+          {
+            "name": "H",
+            "type": "heap"
+          }
+        ]
+      },
+      {
+        "body": {
+          "bindings": [
+            {
+              "lhs": {
+                "name": "B1",
+                "type": "bool"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "J"
+                  },
+                  {
+                    "expType": "literal",
+                    "type": "int",
+                    "value": 0
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 2,
+                  "funName": ">=",
+                  "moduleName": "builtins"
+                }
+              }
+            }
+          ],
+          "expType": "let",
+          "main": {
+            "branches": [
+              {
+                "exp": {
+                  "arguments": [
+                    {
+                      "expType": "variable",
+                      "variable": "V"
+                    },
+                    {
+                      "expType": "variable",
+                      "variable": "I"
+                    },
+                    {
+                      "expType": "variable",
+                      "variable": "H"
+                    }
+                  ],
+                  "expType": "application",
+                  "external": false,
+                  "name": "f6_3"
+                },
+                "pattern": {
+                  "args": [],
+                  "name": false,
+                  "patType": "constructor"
+                }
+              },
+              {
+                "exp": {
+                  "bindings": [
+                    {
+                      "lhs": {
+                        "name": "VJ",
+                        "type": "int"
+                      },
+                      "rhs": {
+                        "arguments": [
+                          {
+                            "expType": "variable",
+                            "variable": "H"
+                          },
+                          {
+                            "expType": "variable",
+                            "variable": "V"
+                          },
+                          {
+                            "expType": "variable",
+                            "variable": "J"
+                          }
+                        ],
+                        "expType": "application",
+                        "external": true,
+                        "name": {
+                          "arity": 3,
+                          "funName": "sel-array",
+                          "moduleName": "builtins"
+                        }
+                      }
+                    },
+                    {
+                      "lhs": {
+                        "name": "J1",
+                        "type": "int"
+                      },
+                      "rhs": {
+                        "arguments": [
+                          {
+                            "expType": "variable",
+                            "variable": "J"
+                          },
+                          {
+                            "expType": "literal",
+                            "type": "int",
+                            "value": 1
+                          }
+                        ],
+                        "expType": "application",
+                        "external": true,
+                        "name": {
+                          "arity": 2,
+                          "funName": "+",
+                          "moduleName": "builtins"
+                        }
+                      }
+                    },
+                    {
+                      "lhs": {
+                        "name": "VJ1",
+                        "type": "int"
+                      },
+                      "rhs": {
+                        "arguments": [
+                          {
+                            "expType": "variable",
+                            "variable": "H"
+                          },
+                          {
+                            "expType": "variable",
+                            "variable": "V"
+                          },
+                          {
+                            "expType": "variable",
+                            "variable": "J1"
+                          }
+                        ],
+                        "expType": "application",
+                        "external": true,
+                        "name": {
+                          "arity": 3,
+                          "funName": "sel-array",
+                          "moduleName": "builtins"
+                        }
+                      }
+                    },
+                    {
+                      "lhs": {
+                        "name": "B2",
+                        "type": "bool"
+                      },
+                      "rhs": {
+                        "arguments": [
+                          {
+                            "expType": "variable",
+                            "variable": "VJ"
+                          },
+                          {
+                            "expType": "variable",
+                            "variable": "VJ1"
+                          }
+                        ],
+                        "expType": "application",
+                        "external": true,
+                        "name": {
+                          "arity": 2,
+                          "funName": ">",
+                          "moduleName": "builtins"
+                        }
+                      }
+                    }
+                  ],
+                  "expType": "let",
+                  "main": {
+                    "branches": [
+                      {
+                        "exp": {
+                          "arguments": [
+                            {
+                              "expType": "variable",
+                              "variable": "V"
+                            },
+                            {
+                              "expType": "variable",
+                              "variable": "I"
+                            },
+                            {
+                              "expType": "variable",
+                              "variable": "H"
+                            }
+                          ],
+                          "expType": "application",
+                          "external": false,
+                          "name": "f6_3"
+                        },
+                        "pattern": {
+                          "args": [],
+                          "name": false,
+                          "patType": "constructor"
+                        }
+                      },
+                      {
+                        "exp": {
+                          "arguments": [
+                            {
+                              "expType": "variable",
+                              "variable": "V"
+                            },
+                            {
+                              "expType": "variable",
+                              "variable": "I"
+                            },
+                            {
+                              "expType": "variable",
+                              "variable": "J"
+                            },
+                            {
+                              "expType": "variable",
+                              "variable": "H"
+                            }
+                          ],
+                          "expType": "application",
+                          "external": false,
+                          "name": "f5_4"
+                        },
+                        "pattern": {
+                          "args": [],
+                          "name": true,
+                          "patType": "constructor"
+                        }
+                      }
+                    ],
+                    "discriminant": {
+                      "expType": "variable",
+                      "variable": "B2"
+                    },
+                    "expType": "case"
+                  }
+                },
+                "pattern": {
+                  "args": [],
+                  "name": true,
+                  "patType": "constructor"
+                }
+              }
+            ],
+            "discriminant": {
+              "expType": "variable",
+              "variable": "B1"
+            },
+            "expType": "case"
+          }
+        },
+        "name": "f4_4",
+        "params": [
+          {
+            "name": "V",
+            "type": "loc"
+          },
+          {
+            "name": "I",
+            "type": "int"
+          },
+          {
+            "name": "J",
+            "type": "int"
+          },
+          {
+            "name": "H",
+            "type": "heap"
+          }
+        ]
+      },
+      {
+        "body": {
+          "bindings": [
+            {
+              "lhs": {
+                "name": "J",
+                "type": "int"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "I"
+                  },
+                  {
+                    "expType": "literal",
+                    "type": "int",
+                    "value": 1
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 2,
+                  "funName": "-",
+                  "moduleName": "builtins"
+                }
+              }
+            }
+          ],
+          "expType": "let",
+          "main": {
+            "arguments": [
+              {
+                "expType": "variable",
+                "variable": "V"
+              },
+              {
+                "expType": "variable",
+                "variable": "I"
+              },
+              {
+                "expType": "variable",
+                "variable": "J"
+              },
+              {
+                "expType": "variable",
+                "variable": "H"
+              }
+            ],
+            "expType": "application",
+            "external": false,
+            "name": "f4_4"
+          }
+        },
+        "name": "f3_3",
+        "params": [
+          {
+            "name": "V",
+            "type": "loc"
+          },
+          {
+            "name": "I",
+            "type": "int"
+          },
+          {
+            "name": "H",
+            "type": "heap"
+          }
+        ]
+      },
+      {
+        "body": {
+          "bindings": [
+            {
+              "lhs": {
+                "name": "X1",
+                "type": "int"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "H"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "V"
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 2,
+                  "funName": "len",
+                  "moduleName": "builtins"
+                }
+              }
+            },
+            {
+              "lhs": {
+                "name": "B",
+                "type": "bool"
+              },
+              "rhs": {
+                "arguments": [
+                  {
+                    "expType": "variable",
+                    "variable": "I"
+                  },
+                  {
+                    "expType": "variable",
+                    "variable": "X1"
+                  }
+                ],
+                "expType": "application",
+                "external": true,
+                "name": {
+                  "arity": 2,
+                  "funName": "<",
+                  "moduleName": "builtins"
+                }
+              }
+            }
+          ],
+          "expType": "let",
+          "main": {
+            "branches": [
+              {
+                "exp": {
+                  "arguments": [
+                    {
+                      "expType": "variable",
+                      "variable": "V"
+                    },
+                    {
+                      "expType": "variable",
+                      "variable": "I"
+                    },
+                    {
+                      "expType": "variable",
+                      "variable": "H"
+                    }
+                  ],
+                  "expType": "application",
+                  "external": false,
+                  "name": "f3_3"
+                },
+                "pattern": {
+                  "args": [],
+                  "name": true,
+                  "patType": "constructor"
+                }
+              },
+              {
+                "exp": {
+                  "expType": "variable",
+                  "variable": "H"
+                },
+                "pattern": {
+                  "args": [],
+                  "name": false,
+                  "patType": "constructor"
+                }
+              }
+            ],
+            "discriminant": {
+              "expType": "variable",
+              "variable": "B"
+            },
+            "expType": "case"
+          }
+        },
+        "name": "f2_3",
+        "params": [
+          {
+            "name": "V",
+            "type": "loc"
+          },
+          {
+            "name": "I",
+            "type": "int"
+          },
+          {
+            "name": "H",
+            "type": "heap"
+          }
+        ]
+      },
+      {
+        "body": {
+          "bindings": [
+            {
+              "lhs": {
+                "name": "I",
+                "type": "int"
+              },
+              "rhs": {
+                "expType": "literal",
+                "type": "int",
+                "value": 0
+              }
+            }
+          ],
+          "expType": "let",
+          "main": {
+            "arguments": [
+              {
+                "expType": "variable",
+                "variable": "V"
+              },
+              {
+                "expType": "variable",
+                "variable": "I"
+              },
+              {
+                "expType": "variable",
+                "variable": "H"
+              }
+            ],
+            "expType": "application",
+            "external": false,
+            "name": "f2_3"
+          }
+        },
+        "name": "f1_2",
+        "params": [
+          {
+            "name": "V",
+            "type": "loc"
+          },
+          {
+            "name": "H",
+            "type": "heap"
+          }
+        ]
+      }
+    ],
+    "expType": "letfun",
+    "main": {
+      "arguments": [
+        {
+          "expType": "variable",
+          "variable": "V"
+        },
+        {
+          "expType": "variable",
+          "variable": "H"
+        }
+      ],
+      "expType": "application",
+      "external": false,
+      "name": "f1_2"
+    }
+  },
+  "entry_point": "inssort_2",
+  "name": {
+    "arity": 2,
+    "fun_name": "inssort",
+    "module": "inssort"
+  },
+  "params": [
+    {
+      "name": "V",
+      "type": "loc"
+    },
+    {
+      "name": "H",
+      "type": "heap"
+    }
+  ]
+}
