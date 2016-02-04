@@ -2,6 +2,6 @@
   {description, "A translation from a subset of Erlang into CAVIART's IR"},
   {vsn, "0.1.0"},
   {registered, []},
-  {applications, [kernel, stdlib, jsx]},
+  {applications, [kernel, stdlib]},
   {env, []}
 ]}.

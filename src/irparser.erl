@@ -460,11 +460,10 @@ exp_to_json(atom, Exp, _FileInfo) ->
 exp_to_json(case_expr, Exp, FileInfo) ->
     Discriminant = case_expr_argument(Exp),
     % We separate the default branch (if any) from the remaining ones.
-    % TODO: Discard branches after the default branch
-    {Default, Nondefault} = list_span(
+    {Nondefault, Default} = lists:splitwith(
         fun(Branch) ->
             Pats = clause_patterns(Branch),
-            length(Pats) =:= 1 andalso type(hd(Pats)) =:= underscore
+            not (length(Pats) =:= 1 andalso type(hd(Pats)) =:= underscore)
         end, case_expr_clauses(Exp)
     ),
     Map = #{
@@ -595,14 +594,4 @@ main([FileName]) ->
     io:format("Done~n");
 main(_) -> io:format("Usage: irparser <filename.erl>~n").    
     
-    
-list_span(_   , Yes, No, []) -> {lists:reverse(Yes), lists:reverse(No)};
-list_span(Pred, Yes, No, [X|Xs]) ->
-    case Pred(X) of
-        true  -> list_span(Pred, [X|Yes], No, Xs);
-        false -> list_span(Pred, Yes, [X|No], Xs)
-    end.
-    
-list_span(Pred, Xs) -> list_span(Pred, [], [], Xs).    
-
 
