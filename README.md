@@ -48,7 +48,6 @@ The following example is an implementation of the insertion sort algorithm.
         J = '-'(I,#{int => 1}),             % J :: int
         f4(V,I,J,H).
     
-    % -assert("X >= 3").
     f4(V,I,J,H) ->                          % V :: loc, I :: int, J :: int, H :: heap
         B1 = '>='(J, #{int => 0}),          % B1 :: bool
         case B1 of
@@ -77,10 +76,7 @@ The following example is an implementation of the insertion sort algorithm.
         I1 = '+'(I,#{int => 1}),            % I1 :: int
         f2(V,I1,H).    
             
-    
-        
     inssort(V,H) -> f1(V,H).                % V :: loc, H :: heap
-    
     
     % TEST:
     
