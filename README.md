@@ -18,6 +18,8 @@ The latter command will create an executable `irparser` in the `_build/default/b
 
 ##Example
 
+The following example is an implementation of the insertion sort algorithm.
+
 ```erlang
     -module(insort).
     
@@ -77,12 +79,7 @@ The latter command will create an executable `irparser` in the `_build/default/b
             
     
         
-    %inssort(V,H) -> f1(V,H).                % V :: loc, H :: heap
-    
-    inssort(V,H) ->
-        case V of
-            {X1,X2} -> #{int => 0}
-        end.
+    inssort(V,H) -> f1(V,H).                % V :: loc, H :: heap
     
     
     % TEST:
