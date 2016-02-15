@@ -8,6 +8,7 @@
 -include("builtins.hrl").
 
 
+
 f1(V,H) ->                              % V :: loc, I :: int, H :: heap
     I = #{int => 0},                    % I :: int
     f2(V,I,H).        
@@ -21,10 +22,12 @@ f2(V,I,H) ->                            % V :: loc, I :: int, H :: heap
         false -> H
     end.
 
+% Assertion: H(V) = Array E N, sorted E[0..I), 0 <= I < N
 f3(V,I,H) ->                            % V :: loc, I :: int, H :: heap
     J = '-'(I,#{int => 1}),             % J :: int
     f4(V,I,J,H).
 
+% Assertion: H(V) = Array E N, sorted E[0..J], sorted E[J+1..I], 0 <= J < I
 f4(V,I,J,H) ->                          % V :: loc, I :: int, J :: int, H :: heap
     B1 = '>='(J, #{int => 0}),          % B1 :: bool
     case B1 of
