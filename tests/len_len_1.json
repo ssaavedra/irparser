@@ -25,7 +25,7 @@
                       "type": "int"
                     },
                     "rhs": {
-                      "arguments": [
+                      "args": [
                         {
                           "expType": "variable",
                           "variable": "Ys"
@@ -39,7 +39,7 @@
                 ],
                 "expType": "let",
                 "main": {
-                  "arguments": [
+                  "args": [
                     {
                       "expType": "variable",
                       "variable": "L1"
@@ -94,7 +94,7 @@
     ],
     "expType": "letfun",
     "main": {
-      "arguments": [
+      "args": [
         {
           "expType": "variable",
           "variable": "Xs"

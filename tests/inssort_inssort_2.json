@@ -10,7 +10,7 @@
                 "type": "int"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "H"
@@ -39,7 +39,7 @@
                 "type": "int"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "J"
@@ -65,7 +65,7 @@
                 "type": "int"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "H"
@@ -94,7 +94,7 @@
                 "type": "loc"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "H"
@@ -127,7 +127,7 @@
                 "type": "loc"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "H1"
@@ -160,7 +160,7 @@
                 "type": "int"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "J"
@@ -183,7 +183,7 @@
           ],
           "expType": "let",
           "main": {
-            "arguments": [
+            "args": [
               {
                 "expType": "variable",
                 "variable": "V"
@@ -235,7 +235,7 @@
                 "type": "int"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "I"
@@ -258,7 +258,7 @@
           ],
           "expType": "let",
           "main": {
-            "arguments": [
+            "args": [
               {
                 "expType": "variable",
                 "variable": "V"
@@ -302,7 +302,7 @@
                 "type": "bool"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "J"
@@ -328,7 +328,7 @@
             "branches": [
               {
                 "exp": {
-                  "arguments": [
+                  "args": [
                     {
                       "expType": "variable",
                       "variable": "V"
@@ -361,7 +361,7 @@
                         "type": "int"
                       },
                       "rhs": {
-                        "arguments": [
+                        "args": [
                           {
                             "expType": "variable",
                             "variable": "H"
@@ -390,7 +390,7 @@
                         "type": "int"
                       },
                       "rhs": {
-                        "arguments": [
+                        "args": [
                           {
                             "expType": "variable",
                             "variable": "J"
@@ -416,7 +416,7 @@
                         "type": "int"
                       },
                       "rhs": {
-                        "arguments": [
+                        "args": [
                           {
                             "expType": "variable",
                             "variable": "H"
@@ -445,7 +445,7 @@
                         "type": "bool"
                       },
                       "rhs": {
-                        "arguments": [
+                        "args": [
                           {
                             "expType": "variable",
                             "variable": "VJ"
@@ -470,7 +470,7 @@
                     "branches": [
                       {
                         "exp": {
-                          "arguments": [
+                          "args": [
                             {
                               "expType": "variable",
                               "variable": "V"
@@ -496,7 +496,7 @@
                       },
                       {
                         "exp": {
-                          "arguments": [
+                          "args": [
                             {
                               "expType": "variable",
                               "variable": "V"
@@ -575,7 +575,7 @@
                 "type": "int"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "I"
@@ -598,7 +598,7 @@
           ],
           "expType": "let",
           "main": {
-            "arguments": [
+            "args": [
               {
                 "expType": "variable",
                 "variable": "V"
@@ -646,7 +646,7 @@
                 "type": "int"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "H"
@@ -671,7 +671,7 @@
                 "type": "bool"
               },
               "rhs": {
-                "arguments": [
+                "args": [
                   {
                     "expType": "variable",
                     "variable": "I"
@@ -696,7 +696,7 @@
             "branches": [
               {
                 "exp": {
-                  "arguments": [
+                  "args": [
                     {
                       "expType": "variable",
                       "variable": "V"
@@ -772,7 +772,7 @@
           ],
           "expType": "let",
           "main": {
-            "arguments": [
+            "args": [
               {
                 "expType": "variable",
                 "variable": "V"
@@ -806,7 +806,7 @@
     ],
     "expType": "letfun",
     "main": {
-      "arguments": [
+      "args": [
         {
           "expType": "variable",
           "variable": "V"

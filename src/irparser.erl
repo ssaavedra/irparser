@@ -492,7 +492,7 @@ exp_to_json(application, Exp, #finf{namespace = NS} = FileInfo) ->
                 external => true,
                 name => #{ moduleName => concrete(ModName), funName => concrete(FunName),
                            arity => length(Args)},
-                arguments => JArgs                
+                args => JArgs                
             };
         atom ->
             FunName = concrete(Operator),
@@ -503,14 +503,14 @@ exp_to_json(application, Exp, #finf{namespace = NS} = FileInfo) ->
                             expType => application,
                             external => false,
                             name => to_bin(stringifyFA({FunName, Arity})),
-                            arguments => JArgs
+                            args => JArgs
                          };
                 % External function (imported via '-import')
                 ModName -> #{
                               expType => application,
                               external => true,
                               name => #{ moduleName => ModName, funName => FunName, arity => Arity },
-                              arguments => JArgs
+                              args => JArgs
                            }
             end
     end;
