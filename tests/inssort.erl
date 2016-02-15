@@ -1,19 +1,20 @@
 -module(inssort).
 
--export([inssort/2]).
+-export([inssort/2, t1/0]).
 
 -units([inssort/2]).
 
--import(builtins, ['<'/2, len/2, '>='/2, '>'/2, '&&'/2, 'sel-array'/3, '-'/2, '+'/2, 'mod-array'/4]).
+-import(builtins, ['<'/2, 'len'/2, '>='/2, '>'/2, '&&'/2, 'sel-array'/3, '-'/2, '+'/2, 'mod-array'/4]).
 -include("builtins.hrl").
 
 
 
-f1(V,H) ->                              % V :: loc, I :: int, H :: heap
+f1(V,H) ->                              % V :: loc, H :: heap
     I = #{int => 0},                    % I :: int
     f2(V,I,H).        
     
     
+% Assertion: H(V) = Array E N, sorted E[0..I), 0 <= I
 f2(V,I,H) ->                            % V :: loc, I :: int, H :: heap
     X1 = 'len'(H,V),                    % X1 :: int
     B = '<'(I,X1),                      % B :: bool
@@ -22,7 +23,6 @@ f2(V,I,H) ->                            % V :: loc, I :: int, H :: heap
         false -> H
     end.
 
-% Assertion: H(V) = Array E N, sorted E[0..I), 0 <= I < N
 f3(V,I,H) ->                            % V :: loc, I :: int, H :: heap
     J = '-'(I,#{int => 1}),             % J :: int
     f4(V,I,J,H).
