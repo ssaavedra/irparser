@@ -21,7 +21,7 @@
 -define(PAT_TYPE_VAR, "([A-Za-z0-9_]+)\\s*::\\s*([A-Za-z0-9_]+)").
 
 % An assertion has the form -assert("<Assertion>")
--define(PAT_ASSERT, "\\-assert\\(\"(.*)\"\\)").
+-define(PAT_ASSERT, "@(precd|postcd)\\(\"(.*)\"\\)").
 
 
 
@@ -83,16 +83,15 @@
                     % their body
                     functions = #{} :: 
                             #{{atom(), integer()} 
-                                    => {lineno(), [{varname(), vartype()}], expression()}}
+                                    => {lineno(), [{varname(), vartype()}], [assertion()], expression()}}
                }).                   
 
 
-% It traverses the comments in order to fill in the 'typeenv' and 'asserts' fields
+% It traverses the comments in order to fill in the 'typeenv'
 % of the FileInfo structure.
 
-get_metadata(Comments, FileInfo) ->
+get_typedecls(Comments, FileInfo) ->
     {ok, PatTypeVar} = re:compile(?PAT_TYPE_VAR),
-    {ok, PatAssert} = re:compile(?PAT_ASSERT),
 
     % It matches the PAT_TYPE_VAR regular expression against each comment
     TypeDecls = [{{Line, VarName}, Type} || 
@@ -101,24 +100,30 @@ get_metadata(Comments, FileInfo) ->
                                 {match, Captures} <- [re:run(Comm, PatTypeVar, 
                                                         [{capture,all,list}, global])],
                                 [_, VarName, Type] <- Captures ],
-                                
-    % The same, but for assertions
-    Asserts = [{Line, Assertion} ||                       
-                                {Line,_,_,CommsPerLine} <- Comments,
-                                Comm <- CommsPerLine,
-                                {match, Captures} <- [re:run(Comm, PatAssert, 
-                                                        [{capture,all,list}, global])],
-                                [_, Assertion] <- Captures ],
-    FileInfo#finf{typeenv = maps:from_list(TypeDecls), 
-              asserts = Asserts}.
+    FileInfo#finf{typeenv = maps:from_list(TypeDecls)}.
+
+% Traverses the comments to fill the function assertions.
+get_asserts(Comments, FileInfo) ->
+    {ok, PatAssert} = re:compile(?PAT_ASSERT),
+
+    Asserts = [{Line, PrePostAtom, Assertion} ||
+		  {Line,_,_,CommsPerLine} <- Comments,
+		  Comm <- CommsPerLine,
+		  {match, Captures} <- [re:run(Comm, PatAssert, 
+					       [{capture,all,list}, global])],
+		  [_, PrePost, Assertion] <- Captures,
+		  PrePostAtom <- case PrePost of
+				     "precd" -> precd;
+				     "postcd" -> postcd
+				 end ],
+
+    FileInfo#finf{asserts = Asserts}.
 
 
-
-
-% It completes the information from the input file.
+% It parses the information from the input file.
 %
-% This function does not take comments into account, as these have already been 
-% handled by get_metadata/2.
+% This function does not take comments into account, as they will be
+% later handled by get_typedecls/2 and get_assertions/2.
 
 parse_file(FileName, Metadata) ->
     {parser, {ok, Forms}} = {parser, epp:parse_file(FileName, [])},
@@ -198,7 +203,7 @@ process_form(Form, FileInfo) ->
                         maps:get({LineNo, variable_literal(Var)}, TypeEnv, none)}
                  || Var <- Patterns, type(Var) == variable ],
             Body = clause_body(Clause),
-            FileInfo#finf{functions = maps:put({Name, Arity}, {LineNo, Vars, Body}, Fs)};
+            FileInfo#finf{functions = maps:put({Name, Arity}, {LineNo, Vars, [], Body}, Fs)};
         _ -> FileInfo
     end.
 
@@ -238,7 +243,7 @@ get_dependency_graph(#finf{functions = Fs, builtins = Bs}) ->
     FsList = maps:to_list(Fs),
     [ digraph:add_vertex(DepGraph, FunArity) || {FunArity, _} <- FsList],
     [ digraph:add_edge(DepGraph, FA1, FA2) || 
-        {FA1, {_, _, Body}} <- FsList,
+        {FA1, {_, _, _, Body}} <- FsList,
         FA2 <- get_calls(Body),
         not lists:member(FA2, Bs)],
     DepGraph.
@@ -521,22 +526,23 @@ exp_to_json(_, Exp, _) ->
 
 
 % It transforms a function definition into JSON
-def_to_json(FunArity, {_, Params, Exp}, FileInfo) ->
+def_to_json(FunArity, {_, Params, Assertions, Exp}, FileInfo) ->
     #{
-      name => to_bin(stringifyFA(FunArity)),
-      params => [ 
-        case Type of
-            none -> #{name => to_bin(Var)};
-            _    -> #{name => to_bin(Var), type => to_bin(Type)}
-        end || {Var,Type} <- Params
-      ],
-      body => exp_to_json(Exp, FileInfo)
-      }.
+       name => to_bin(stringifyFA(FunArity)),
+       assertions => to_bin(Assertions),
+       params => [ 
+		   case Type of
+		       none -> #{name => to_bin(Var)};
+		       _    -> #{name => to_bin(Var), type => to_bin(Type)}
+		   end || {Var,Type} <- Params
+		 ],
+       body => exp_to_json(Exp, FileInfo)
+     }.
 
 % It constructs the JSON of a single execution unit.
 build_json_for(#finf{module = M, functions = Fs} = FileInfo, DepGraph, {Fun,Arity} = FunArity) ->
     % We get the function definition.
-    {_, VarTypes, Body} = maps:get(FunArity, Fs),
+    {_, VarTypes, _, Body} = maps:get(FunArity, Fs),
     
     % We obtain the function dependencies
     Deps = digraph_utils:reachable_neighbours([FunArity], DepGraph),
@@ -566,6 +572,11 @@ build_json_for(#finf{module = M, functions = Fs} = FileInfo, DepGraph, {Fun,Arit
         entry_point => to_bin(stringifyFA(FunArity))
     }.
 
+get_execution_unit_name(ModName, {F,A}) ->
+    atom_to_list(ModName) ++ "_"
+	++ atom_to_list(F)
+	++ integer_to_list(A).
+
 
 % Write a JSON into disk.
 write_to_file(ModName, {F,A}, JSON) ->
@@ -575,23 +586,38 @@ write_to_file(ModName, {F,A}, JSON) ->
     io:format(Handle, "~ts~n", [jsx:prettify(jsx:encode(JSON))]),
     io:format("Execution unit ~w/~w written into ~s~n", [F, A, FileName]).
 
-% Main function
-main([FileName]) ->
+scan_file(FileName) ->
     % Obtain info from the source file
     Comments = erl_comment_scan:file(FileName),
-    FileInfo = get_metadata(Comments, #finf{}),
-    FileInfo2 = parse_file(FileName, FileInfo),
-    
+    FileInfo = parse_file(FileName, get_typedecls(Comments, #finf{})),
+    FileInfo2 = get_asserts(Comments, FileInfo),
+
     % Build dependency graph
     DepGraph = get_dependency_graph(FileInfo2),
 
     % For each declared execution unit, we generate the pair {{Fun,Arity}, JSON}
-    #finf{units = Us, module = ModName} = FileInfo2,
+    #finf{units = Us} = FileInfo2,
     JSONReps = [ {U, build_json_for(FileInfo2, DepGraph, U)} || U <- Us ],
-    
+    {FileInfo2, JSONReps}.
+
+
+% Main function
+main([FileName]) ->
+    {FileInfo, JSONReps} = scan_file(FileName),
+    #finf{module = ModName} = FileInfo,
+
+    % Write the JSON of each execution unit to stdout
+    [ io:format("{\"execution_unit\":\"~s\",\"body\":~n~ts~n}~n", [get_execution_unit_name(ModName, U), jsx:prettify(jsx:encode(JSON))]) || {U, JSON} <- JSONReps ];
+
+main(["--per-unit", FileName]) ->
+    io:format("Writing to files~n"),
+    {FileInfo, JSONReps} = scan_file(FileName),
+    #finf{module = ModName} = FileInfo,
+
     % Write the JSON of each execution unit into a separate file.
     [ write_to_file(ModName, U, JSON) || {U, JSON} <- JSONReps ],
     io:format("Done~n");
-main(_) -> io:format("Usage: irparser <filename.erl>~n").    
+
+main(_) -> io:format("Usage: irparser [--per-unit] <filename.erl>~n").
     
 

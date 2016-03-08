@@ -27,7 +27,7 @@ f3(V,I,H) ->                            % V :: loc, I :: int, H :: heap
     J = '-'(I,#{int => 1}),             % J :: int
     f4(V,I,J,H).
 
-% Assertion: H(V) = Array E N, sorted E[0..J], sorted E[J+1..I], 0 <= J < I
+% Assertion: H(V) = Array E N, sorted E[0..J], sorted E[J+1..I], -1 <= J < I, E[J - 1] <= E[J + 1]
 f4(V,I,J,H) ->                          % V :: loc, I :: int, J :: int, H :: heap
     B1 = '>='(J, #{int => 0}),          % B1 :: bool
     case B1 of
