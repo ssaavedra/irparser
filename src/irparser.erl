@@ -157,7 +157,7 @@ process_form(Form, FileInfo) ->
                              fun(I, NS) -> 
                                 FunName = arity_qualifier_body(I),
                                 Arity = arity_qualifier_argument(I),
-                                NS#{{concrete(FunName), concrete(Arity)} => concrete(ModName)}
+                                maps:put({concrete(FunName), concrete(Arity)}, concrete(ModName), NS)
                              end, NSInit, Imports),
                     FileInfo#finf{namespace = NSNew};
                     
@@ -198,7 +198,7 @@ process_form(Form, FileInfo) ->
                         maps:get({LineNo, variable_literal(Var)}, TypeEnv, none)}
                  || Var <- Patterns, type(Var) == variable ],
             Body = clause_body(Clause),
-            FileInfo#finf{functions = Fs#{{Name,Arity} => {LineNo, Vars, Body}}};
+            FileInfo#finf{functions = maps:put({Name, Arity}, {LineNo, Vars, Body}, Fs)};
         _ -> FileInfo
     end.
 
