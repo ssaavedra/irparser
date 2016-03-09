@@ -102,22 +102,58 @@ get_typedecls(Comments, FileInfo) ->
                                 [_, VarName, Type] <- Captures ],
     FileInfo#finf{typeenv = maps:from_list(TypeDecls)}.
 
+
+get_functions_per_line(Functions) ->
+    maps:fold(
+      fun (K,V,Acc) ->
+	      {LineNo,_,_,_} = V,
+	      orddict:store(LineNo, {K,V}, Acc)
+      end, orddict:new(), Functions).
+
+pair_asserts_funs (_LineNo, {K,F}, {[], FinishedFuns}) ->
+    {[], maps:put(K,F, FinishedFuns)};
+pair_asserts_funs (LineNo, {K,F}, {[Assert|AT], FinishedFuns}) ->
+    {LineNo, Args, Asserts, Body} = F,
+
+    case maps:get(line, Assert) < LineNo of
+	true ->
+	    pair_asserts_funs(LineNo,
+			      {K, {LineNo,Args,[Assert|Asserts],Body}},
+			      {AT, FinishedFuns});
+	_ ->
+	    {[Assert|AT], maps:put(K,F,FinishedFuns)}
+    end.
+
+
 % Traverses the comments to fill the function assertions.
 get_asserts(Comments, FileInfo) ->
     {ok, PatAssert} = re:compile(?PAT_ASSERT),
 
-    Asserts = [{Line, PrePostAtom, Assertion} ||
-		  {Line,_,_,CommsPerLine} <- Comments,
-		  Comm <- CommsPerLine,
-		  {match, Captures} <- [re:run(Comm, PatAssert, 
-					       [{capture,all,list}, global])],
-		  [_, PrePost, Assertion] <- Captures,
-		  PrePostAtom <- case PrePost of
-				     "precd" -> precd;
-				     "postcd" -> postcd
-				 end ],
+    %% Find all the asserts
+    Asserts =
+	[#{
+	    line => Line,
+	    assertType => case PrePost of
+			      "precd" -> precd;
+			      "postcd" -> postcd
+			  end,
+	    expr => list_to_binary(Assertion)} ||
+	    {Line,_,_,CommsPerLine} <- Comments,
+	    Comm <- CommsPerLine,
+	    {match, Captures} <-
+		[re:run(Comm, PatAssert, [{capture,all,list}, global])],
+	    [_FullCapture, PrePost, Assertion] <- Captures],
 
-    FileInfo#finf{asserts = Asserts}.
+    %% Now get where do those asserts go. For that we need both
+    %% structures ordered by LineNo. This costs us avg. O(n·log n)
+    %% Asserts are already brought ordered by the regex matcher (in
+    %% O(n) time)
+    FunsPerLine = get_functions_per_line(FileInfo#finf.functions),
+    {_, Functions2} = orddict:fold(fun pair_asserts_funs/3,
+				   {Asserts, maps:new()},
+				   FunsPerLine),
+
+    FileInfo#finf{functions = Functions2}.
 
 
 % It parses the information from the input file.
@@ -529,7 +565,7 @@ exp_to_json(_, Exp, _) ->
 def_to_json(FunArity, {_, Params, Assertions, Exp}, FileInfo) ->
     #{
        name => to_bin(stringifyFA(FunArity)),
-       assertions => to_bin(Assertions),
+       assertions => Assertions,
        params => [ 
 		   case Type of
 		       none -> #{name => to_bin(Var)};
@@ -540,7 +576,7 @@ def_to_json(FunArity, {_, Params, Assertions, Exp}, FileInfo) ->
      }.
 
 % It constructs the JSON of a single execution unit.
-build_json_for(#finf{module = M, functions = Fs} = FileInfo, DepGraph, {Fun,Arity} = FunArity) ->
+build_json_for(#finf{module = M, functions = Fs, asserts = As} = FileInfo, DepGraph, {Fun,Arity} = FunArity) ->
     % We get the function definition.
     {_, VarTypes, _, Body} = maps:get(FunArity, Fs),
     
@@ -566,6 +602,7 @@ build_json_for(#finf{module = M, functions = Fs} = FileInfo, DepGraph, {Fun,Arit
                          )
               end,
     #{
+        assertions => As,
         name => #{module => M, fun_name => Fun, arity => Arity},
         params => [ #{name => to_bin(Var), type => to_bin(Type)} || {Var,Type} <- VarTypes],
         body => build_letfun(JDepFuns, MainExp),
