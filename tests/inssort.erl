@@ -9,13 +9,14 @@
 
 
 
-f1(V,H) ->                              % V :: loc, H :: heap
+f1(V,H) ->                              % V :: loc (array int), H :: heap
     I = #{int => 0},                    % I :: int
     f2(V,I,H).        
     
     
-% Assertion: H(V) = Array E N, sorted E[0..I), 0 <= I
-f2(V,I,H) ->                            % V :: loc, I :: int, H :: heap
+%@precd("forall E: array int. deref(H, V) = E -> sorted_sub E 0 I and 0 =< I")
+%@postcd("forall E: array int. deref(H,V) = E -> sorted E")
+f2(V,I,H) ->                            % V :: loc (array int), I :: int, H :: heap
     X1 = 'len'(H,V),                    % X1 :: int
     B = '<'(I,X1),                      % B :: bool
     case B of
@@ -23,12 +24,12 @@ f2(V,I,H) ->                            % V :: loc, I :: int, H :: heap
         false -> H
     end.
 
-f3(V,I,H) ->                            % V :: loc, I :: int, H :: heap
+f3(V,I,H) ->                            % V :: loc (array int), I :: int, H :: heap
     J = '-'(I,#{int => 1}),             % J :: int
     f4(V,I,J,H).
 
-% Assertion: H(V) = Array E N, sorted E[0..J], sorted E[J+1..I], -1 <= J < I, E[J - 1] <= E[J + 1]
-f4(V,I,J,H) ->                          % V :: loc, I :: int, J :: int, H :: heap
+%@precd("forall E:array int. deref(H,V) = E -> sorted_sub E 0 (J + 1) and sorted_sub E (J+1) (I + 1) and -1 <= J < I and E[J - 1] <= E[J + 1]")
+f4(V,I,J,H) ->                          % V :: loc (array int), I :: int, J :: int, H :: heap
     B1 = '>='(J, #{int => 0}),          % B1 :: bool
     case B1 of
         false -> f6(V,I,H);
@@ -43,20 +44,20 @@ f4(V,I,J,H) ->                          % V :: loc, I :: int, J :: int, H :: hea
             end
     end.
     
-f5(V,I,J,H) ->                          % V :: loc, I :: int, J :: int, H :: heap
+f5(V,I,J,H) ->                          % V :: loc (array int), I :: int, J :: int, H :: heap
     E = 'sel-array'(H,V,J),             % E :: int
     J1 = '+'(J, #{int => 1}),           % J1 :: int
     E2 = 'sel-array'(H,V,J1),           % E2 :: int
-    H1 = 'mod-array'(H,V,J,E2),         % H1 :: loc
-    H2 = 'mod-array'(H1,V,J1,E),        % H2 :: loc
+    H1 = 'mod-array'(H,V,J,E2),         % H1 :: loc (array int)
+    H2 = 'mod-array'(H1,V,J1,E),        % H2 :: loc (array int)
     J2 = '-'(J,#{int => 1}),            % J2 :: int
     f4(V,I,J2,H2).
 
-f6(V,I,H) ->                            % V :: loc, I :: int, H :: heap
+f6(V,I,H) ->                            % V :: loc (array int), I :: int, H :: heap
     I1 = '+'(I,#{int => 1}),            % I1 :: int
     f2(V,I1,H).    
     
-inssort(V,H) -> f1(V,H).                % V :: loc, H :: heap
+inssort(V,H) -> f1(V,H).                % V :: loc (array int), H :: heap
 
 % TEST:
 
