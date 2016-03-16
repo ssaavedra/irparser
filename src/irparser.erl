@@ -18,7 +18,7 @@
 % Regular expression definitions --------------------------
 
 % A type declaration has the form <Var> :: <Type>
--define(PAT_TYPE_VAR, "([A-Za-z0-9_]+)\\s*::\\s*([A-Za-z0-9_]+)").
+-define(PAT_TYPE_VAR, "([A-Za-z0-9_]+)\\s*::\\s*([A-Za-z0-9_\\(\\)\\s]+)").
 
 % An assertion has the form -assert("<Assertion>")
 -define(PAT_ASSERT, "@(precd|postcd)\\(\"(.*)\"\\)").
