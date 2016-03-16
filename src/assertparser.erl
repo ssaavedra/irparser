@@ -16,14 +16,6 @@
 -export([parse_functions/1]).
 
 
-% Regular expression definitions --------------------------
-
-% A type declaration has the form <Var> :: <Type>
--define(PAT_TYPE_VAR, "([A-Za-z0-9_]+)\\s*::\\s*([A-Za-z0-9_]+)").
-
-% An assertion has the form -assert("<Assertion>")
--define(PAT_ASSERT, "\\-assert\\(\"(.*)\"\\)").
-
 parse_assert(Str, Vars) ->
     %% This function must parse expressions such as:
     %% (given vars inc. [{H, heap}, {V, loc (array int)}, {J, int}, {I, int}]
