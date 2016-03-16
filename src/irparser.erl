@@ -12,7 +12,7 @@
 
 -author("Manuel Montenegro").
 
--export([main/1]).
+-export([main/1, params_to_json/1]).
 
 
 % Regular expression definitions --------------------------
@@ -38,54 +38,7 @@
                     map_field_exact_name/1, map_field_exact_value/1,
                     variable/1, abstract/1, application/2]).
 
-% ------------------------------------------------------------------
-% Global information gathered from the source code:
-%
-% It contains: 
-%    - Type annotations  (<Var> :: <Type>)
-%    - Assertions  (-assert("<assertion>"))
-%    - Module name
-%    - Execution units to be transformed into JSON
-%    - Functions imported in the current namespace
-%    - Function definitions contained within the file
-% ------------------------------------------------------------------
-
--type lineno() :: integer().
--type varname() :: string().
--type vartype() :: string().
--type expression() :: term().
--type assertion() :: string().
-
-                   
--record(finf, {
-                    % A type environment associates the declaration of a variable
-                    % in a given line to its type.
-                    typeenv = #{} :: #{{lineno(), varname()} => vartype()},
-                    
-                    % Assertions contained within the program (not used yet)
-                    asserts = [] :: [{lineno(), assertion()}],
-                    
-                    % Name of the module being transformed
-                    module = no_module :: atom(),
-                    
-                    % Execution units to be generated (name/arity)
-                    units = [] :: [{atom(), integer()}],
-                    
-                    % Functions to be excluded from the transformation (name/arity)
-                    builtins = [] :: [{atom(), integer()}],
-                    
-                    % Imported functions: for each name/arity it gives the module
-                    % from which it is imported.
-                    namespace = #{} :: #{{atom(), integer()} => atom()},
-                    
-                    % Functions contained within the file. For each function it
-                    % stores the line number, the parameters (with its types), and
-                    % their body
-                    functions = #{} :: 
-                            #{{atom(), integer()} 
-                                    => {lineno(), [{varname(), vartype()}], [assertion()], expression()}}
-               }).                   
-
+-include("irparser.hrl").
 
 % It traverses the comments in order to fill in the 'typeenv'
 % of the FileInfo structure.
@@ -137,7 +90,7 @@ get_asserts(Comments, FileInfo) ->
 			      "precd" -> precd;
 			      "postcd" -> postcd
 			  end,
-	    expr => list_to_binary(Assertion)} ||
+	    rawExpr => list_to_binary(Assertion)} ||
 	    {Line,_,_,CommsPerLine} <- Comments,
 	    Comm <- CommsPerLine,
 	    {match, Captures} <-
@@ -153,7 +106,8 @@ get_asserts(Comments, FileInfo) ->
 				   {Asserts, maps:new()},
 				   FunsPerLine),
 
-    FileInfo#finf{functions = Functions2}.
+    FunctionsWithAsserts = assertparser:parse_functions(FileInfo#finf{functions = Functions2}),
+    FileInfo#finf{functions = FunctionsWithAsserts}.
 
 
 % It parses the information from the input file.
@@ -560,18 +514,18 @@ exp_to_json(_, Exp, _) ->
     io:format("Unknown expression: ~s~n", [erl_prettypr:format(Exp)]),
     #{expType => unknown}.
 
+params_to_json(Params) ->
+    [case Type of
+	 none -> #{name => to_bin(Var)};
+	 _    -> #{name => to_bin(Var), type => to_bin(Type)}
+     end || {Var,Type} <- Params].
 
 % It transforms a function definition into JSON
 def_to_json(FunArity, {_, Params, Assertions, Exp}, FileInfo) ->
     #{
        name => to_bin(stringifyFA(FunArity)),
        assertions => Assertions,
-       params => [ 
-		   case Type of
-		       none -> #{name => to_bin(Var)};
-		       _    -> #{name => to_bin(Var), type => to_bin(Type)}
-		   end || {Var,Type} <- Params
-		 ],
+       params => params_to_json(Params),
        body => exp_to_json(Exp, FileInfo)
      }.
 
